@@ -6,12 +6,12 @@ import cv2
 
 VIDEO_PATH = "/home/object_detection/input/sidewalk.mp4"
 
-class ImagePublisher(Node):
+class VideoReader(Node):
 
     def __init__(self):
         super().__init__('video_node')
-        self.image_publisher = self.create_publisher(Image, 'topic', 10)
-        timer_period = 0.1 # seconds
+        self.image_publisher = self.create_publisher(Image, 'images', 10)
+        timer_period = 0.2 # seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
 
         self.bridge = CvBridge()
@@ -30,13 +30,13 @@ class ImagePublisher(Node):
 
         ret, frame = self.cap.read()
         if ret :
-            cv2.imshow('Frame', frame)
-            cv2.waitKey(3)
             try:
                 frame_msg = self.bridge.cv2_to_imgmsg(frame, encoding="bgr8")
             except CvBridgeError as e:
                 print(e)
             else:
+                timestamp = self.get_clock().now()
+                frame_msg.header.stamp = rclpy.time.Time.to_msg(timestamp)
                 self.image_publisher.publish(frame_msg)
         else:
             self.is_video_loaded = False
@@ -45,7 +45,7 @@ class ImagePublisher(Node):
 def main(args=None):
     rclpy.init(args=args)
 
-    minimal_publisher = ImagePublisher()
+    minimal_publisher = VideoReader()
 
     rclpy.spin(minimal_publisher)
 

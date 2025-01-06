@@ -20,7 +20,10 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'video_node = object_detection.video_node:main'
+            'video_node = object_detection.video_node:main',
+            'detector_node = object_detection.object_detection_node:main',
+            'pose_detector_node = object_detection.pose_detection_node:main',
+            'display_node = object_detection.display_node:main',
         ],
     },
 )
