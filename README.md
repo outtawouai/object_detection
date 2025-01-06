@@ -1,3 +1,6 @@
+
+![example](https://github.com/user-attachments/assets/6bcf0672-0934-4cd2-8d90-3ecc07708516)
+
 ### object_detection
 Object + pose detection module running with ROS2
 
